@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+main.js
+*.js.map
+
+# Development files
+.DS_Store
+.vscode/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment files
+.env
+.env.local
+
+# IDE files
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+Thumbs.db 
