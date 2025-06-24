@@ -2,7 +2,7 @@
 
 All notable changes to the Clipboard Manager plugin will be documented in this file.
 
-## [1.0.0] - 2024-12-23
+## [1.0.0] - 2024-12-27
 
 ### Added
 - 🎉 Initial release of Clipboard Manager plugin
@@ -10,7 +10,12 @@ All notable changes to the Clipboard Manager plugin will be documented in this f
 - 🔍 Real-time search functionality across clipboard history
 - ⚡ Live updates in open modals when new content is copied
 - 📋 Quick paste modal for direct insertion into notes
-- ⚙️ Customizable settings (max entries, check interval, notifications)
+- 📤 Export functionality for clipboard entries
+- 📂 Configurable export folder location
+- 🔄 Export all entries or filtered search results
+- 📝 Markdown-formatted exports with timestamps
+- 🧩 Special handling for Markdown content in exports
+- ⚙️ Customizable settings (max entries, check interval, notifications, export options)
 - 🎯 Multiple access methods (ribbon icon, command palette)
 - 💾 Persistent storage of clipboard history across sessions
 - 🖥️ Desktop-only support using Electron clipboard API

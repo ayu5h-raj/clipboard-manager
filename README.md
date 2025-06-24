@@ -26,6 +26,11 @@ A powerful clipboard manager plugin for Obsidian that automatically stores your 
 - Hotkey support
 - Quick paste modal with keyboard shortcuts
 
+### 📤 Export Functionality
+- Export all entries or filtered search results to Markdown files
+- Configurable export folder location
+- Preserves formatting with proper Markdown syntax
+
 ### ⚙️ Customizable Settings
 - Adjustable maximum entries
 - Configurable check interval
@@ -55,6 +60,7 @@ A powerful clipboard manager plugin for Obsidian that automatically stores your 
 3. **Search**: Type in the search box to filter your clipboard history
 4. **Copy Back**: Click "Copy" next to any entry to copy it back to your clipboard
 5. **Delete Entries**: Remove unwanted entries with the "Delete" button
+6. **Export**: Export all clipboard history to Markdown files
 
 ### Quick Paste Feature
 1. Use the "Paste from Clipboard History" command
@@ -82,6 +88,12 @@ Configure how often the plugin checks for clipboard changes (default: 1000ms). L
 
 ### Notifications
 Enable/disable notifications when new clipboard content is saved (default: disabled).
+
+### Default Export Folder
+Set the folder path where clipboard entries will be exported (default: "clipboard"). This path is relative to your vault root.
+
+### Default Export Count
+Set the maximum number of clipboard entries to export (default: 50). Entries are exported in chronological order, with the most recent entries first.
 
 ## Privacy & Security
 
@@ -134,5 +146,9 @@ MIT License - see LICENSE file for details.
 - Automatic clipboard monitoring
 - Search functionality
 - Quick paste feature
+- Export functionality for clipboard entries
+- Export entries to Markdown files
+- Configurable export settings
+- Preserves formatting with proper Markdown syntax
 - Configurable settings
-- Clean, responsive UI 
+- Clean, responsive UI
