@@ -11,12 +11,16 @@ interface ClipboardManagerSettings {
     maxEntries: number;
     checkInterval: number;
     enableNotifications: boolean;
+    defaultExportFolder: string;
+    defaultExportCount: number;
 }
 
 const DEFAULT_SETTINGS: ClipboardManagerSettings = {
     maxEntries: 100,
     checkInterval: 1000, // 1 second
-    enableNotifications: false
+    enableNotifications: false,
+    defaultExportFolder: 'clipboard',
+    defaultExportCount: 50
 };
 
 export default class ClipboardManagerPlugin extends Plugin {
@@ -37,7 +41,7 @@ export default class ClipboardManagerPlugin extends Plugin {
         // Add command
         this.addCommand({
             id: 'open-clipboard-manager',
-            name: 'Open Clipboard Manager',
+            name: 'Open clipboard history',
             callback: () => {
                 new ClipboardHistoryModal(this.app, this).open();
             }
@@ -46,7 +50,7 @@ export default class ClipboardManagerPlugin extends Plugin {
         // Add command to paste from history
         this.addCommand({
             id: 'paste-from-history',
-            name: 'Paste from Clipboard History',
+            name: 'Paste from history',
             callback: () => {
                 new ClipboardPasteModal(this.app, this).open();
             }
@@ -197,6 +201,56 @@ export default class ClipboardManagerPlugin extends Plugin {
         this.notifyHistoryUpdate();
         new Notice('Clipboard history cleared!');
     }
+
+    async exportClipboardEntries(entries: ClipboardEntry[], folderPath?: string, maxEntries?: number) {
+        // Create clipboard folder if it doesn't exist
+        const clipboardFolder = folderPath || this.settings.defaultExportFolder;
+        
+        // Limit the number of entries to export
+        const limitedEntries = entries.slice(0, maxEntries || this.settings.defaultExportCount);
+        
+        try {
+            if (!(await this.app.vault.adapter.exists(clipboardFolder))) {
+                await this.app.vault.createFolder(clipboardFolder);
+            }
+            
+            // Generate timestamp for filename
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const filename = `${clipboardFolder}/${timestamp}.md`;
+            
+            // Format content
+            let content = `# Clipboard Export (${new Date().toLocaleString()})\n\n`;
+            
+            // Add each entry with timestamp
+            limitedEntries.forEach((entry, index) => {
+                content += `## Entry ${index + 1} - ${new Date(entry.timestamp).toLocaleString()}\n\n`;
+                
+                // Check if content appears to be markdown
+                if (entry.content.includes('#') || entry.content.includes('```') || 
+                    entry.content.includes('*') || entry.content.includes('- [')) {
+                    // For markdown content, add a special code block to preserve formatting
+                    content += "```markdown\n" + entry.content + "\n```\n\n";
+                    // Also add raw version for usability
+                    content += entry.content + "\n\n";
+                } else {
+                    // Regular content
+                    content += "```\n" + entry.content + "\n```\n\n";
+                }
+            });
+            
+            // Create file
+            await this.app.vault.create(filename, content);
+            
+            // Show confirmation
+            new Notice(`Exported ${limitedEntries.length} clipboard entries to ${filename}`);
+            
+            return filename;
+        } catch (error) {
+            console.error('Error exporting clipboard entries:', error);
+            new Notice('Failed to export clipboard entries');
+            return null;
+        }
+    }
 }
 
 class ClipboardHistoryModal extends Modal {
@@ -232,8 +286,27 @@ class ClipboardHistoryModal extends Modal {
             this.renderHistory();
         });
 
-        // Clear all button
+        // Buttons container
         const buttonsContainer = contentEl.createDiv('clipboard-buttons');
+        
+        // Export button
+        const exportButton = buttonsContainer.createEl('button', {
+            text: 'Export All',
+            cls: 'mod-cta'
+        });
+        exportButton.addEventListener('click', () => {
+            const entries = this.searchInput.value 
+                ? this.plugin.searchClipboardHistory(this.searchInput.value)
+                : this.plugin.clipboardHistory;
+                
+            if (entries.length > 0) {
+                this.plugin.exportClipboardEntries(entries);
+            } else {
+                new Notice('No entries to export');
+            }
+        });
+        
+        // Clear all button
         const clearButton = buttonsContainer.createEl('button', {
             text: 'Clear All',
             cls: 'mod-warning'
@@ -283,6 +356,7 @@ class ClipboardHistoryModal extends Modal {
             copyButton.addEventListener('click', () => {
                 this.plugin.copyToClipboard(entry.content);
             });
+
 
             const deleteButton = actionsEl.createEl('button', {
                 text: 'Delete',
@@ -481,6 +555,33 @@ class ClipboardManagerSettingTab extends PluginSettingTab {
                 .onChange(async (value) => {
                     this.plugin.settings.enableNotifications = value;
                     await this.plugin.saveSettings();
+                }));
+                
+        new Setting(containerEl)
+            .setName('Default export folder')
+            .setDesc('Path where clipboard entries will be exported (relative to vault root)')
+            .addText(text => text
+                .setPlaceholder('clipboard')
+                .setValue(this.plugin.settings.defaultExportFolder)
+                .onChange(async (value) => {
+                    if (value) {
+                        this.plugin.settings.defaultExportFolder = value;
+                        await this.plugin.saveSettings();
+                    }
+                }));
+                
+        new Setting(containerEl)
+            .setName('Default export count')
+            .setDesc('Maximum number of entries to export (most recent first)')
+            .addText(text => text
+                .setPlaceholder('50')
+                .setValue(this.plugin.settings.defaultExportCount.toString())
+                .onChange(async (value) => {
+                    const num = parseInt(value);
+                    if (!isNaN(num) && num > 0) {
+                        this.plugin.settings.defaultExportCount = num;
+                        await this.plugin.saveSettings();
+                    }
                 }));
     }
 } 
