@@ -2,7 +2,7 @@
 
 All notable changes to the Clipboard Manager plugin will be documented in this file.
 
-## [1.0.0] - 2024-12-27
+## [1.0.0] - 2025-06-24
 
 ### Added
 - 🎉 Initial release of Clipboard Manager plugin
