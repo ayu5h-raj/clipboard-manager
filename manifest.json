@@ -1,7 +1,7 @@
 {
 	"id": "clipboard-manager",
 	"name": "Clipboard Manager",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "A clipboard manager that stores clipboard history and provides search functionality with real-time updates",
 	"author": "Ayush Raj",
