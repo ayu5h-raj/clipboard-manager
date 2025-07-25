@@ -1,6 +1,6 @@
 {
   "name": "obsidian-clipboard-manager",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "A clipboard manager plugin for Obsidian",
   "main": "main.js",
   "scripts": {
