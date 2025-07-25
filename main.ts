@@ -34,7 +34,7 @@ export default class ClipboardManagerPlugin extends Plugin {
         await this.loadSettings();
 
         // Add ribbon icon
-        this.addRibbonIcon('clipboard', 'Clipboard Manager', (evt: MouseEvent) => {
+        this.addRibbonIcon('clipboard', 'Clipboard manager', (evt: MouseEvent) => {
             new ClipboardHistoryModal(this.app, this).open();
         });
 
@@ -272,7 +272,7 @@ class ClipboardHistoryModal extends Modal {
         // Register for history updates
         this.plugin.registerHistoryUpdateCallback(this.updateCallback);
 
-        contentEl.createEl('h2', { text: 'Clipboard History' });
+        contentEl.createEl('h2', { text: 'Clipboard history' });
 
         // Search input
         const searchContainer = contentEl.createDiv('clipboard-search-container');
@@ -291,7 +291,7 @@ class ClipboardHistoryModal extends Modal {
         
         // Export button
         const exportButton = buttonsContainer.createEl('button', {
-            text: 'Export All',
+                                    text: 'Export all',
             cls: 'mod-cta'
         });
         exportButton.addEventListener('click', () => {
@@ -308,7 +308,7 @@ class ClipboardHistoryModal extends Modal {
         
         // Clear all button
         const clearButton = buttonsContainer.createEl('button', {
-            text: 'Clear All',
+                                    text: 'Clear all',
             cls: 'mod-warning'
         });
         clearButton.addEventListener('click', () => {
@@ -401,7 +401,7 @@ class ClipboardPasteModal extends Modal {
         // Register for history updates
         this.plugin.registerHistoryUpdateCallback(this.updateCallback);
 
-        contentEl.createEl('h2', { text: 'Paste from Clipboard History' });
+        contentEl.createEl('h2', { text: 'Paste from clipboard history' });
 
         // Search input
         const searchContainer = contentEl.createDiv('clipboard-search-container');
@@ -514,7 +514,7 @@ class ClipboardManagerSettingTab extends PluginSettingTab {
 
         containerEl.empty();
 
-        containerEl.createEl('h2', { text: 'Clipboard Manager Settings' });
+
 
         new Setting(containerEl)
             .setName('Maximum entries')

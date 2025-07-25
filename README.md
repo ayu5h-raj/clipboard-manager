@@ -1,4 +1,4 @@
-# Obsidian Clipboard Manager Plugin
+# Clipboard Manager Plugin
 
 A powerful clipboard manager plugin for Obsidian that automatically stores your clipboard history and provides advanced search functionality. Perfect for managing text snippets, code blocks, and frequently used content.
 
